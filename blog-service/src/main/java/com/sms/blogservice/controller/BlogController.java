@@ -17,18 +17,18 @@ public class BlogController {
         this.blogService = blogService;
     }
 
-    @PostMapping("/saveBlog")
+    @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody BlogPojo blog){
         blogService.saveBlog(blog);
         return ResponseEntity.ok("Blog add successfully.");
     }
 
-    @GetMapping("/findAll")
+    @GetMapping("/fetchAll")
     public ResponseEntity<List<Blog>> findAllBlog(){
         return ResponseEntity.ok().body(blogService.getAllBlog());
     }
 
-    @GetMapping("/findById/{id}")
+    @GetMapping("/fetchById/{id}")
     public ResponseEntity<Blog> findById(@PathVariable Long id){
         return ResponseEntity.ok().body(blogService.getByBlogId(id));
     }
@@ -43,7 +43,7 @@ public class BlogController {
         return ResponseEntity.ok().body(blogService.updateBlog(blog,id));
     }
 
-    @GetMapping("/findAllActive")
+    @GetMapping("/fetchAllActive")
     public ResponseEntity<List<Blog>> findAllActive(){
         return ResponseEntity.ok().body(blogService.findAllActiveBlog());
     }

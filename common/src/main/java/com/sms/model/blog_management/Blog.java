@@ -27,9 +27,9 @@ public class Blog {
     @Column(name = "created_time")
     private LocalDateTime createdAt;
 
-    @ManyToOne
+
     @JoinColumn(name = "category_id")
-    private Category category;
+    private String category;
 
     private String status;
 

@@ -23,9 +23,9 @@ public class UserController {
     private UserService userService;
     @GetMapping("/fetch")
     public ResponseEntity<SmsResponse> getUserByEmail(@RequestParam("email") String email) {
-        Map<String, Objects> userRes=userService.getByEmail(email);
+        User userRes=userService.getByEmail(email);
         System.out.println(userRes);
-        if(userRes.isEmpty()){
+        if(userRes.equals(null)){
             throw new NotFoundException("Unregistered Email!");
         }
         return ResponseEntity.ok().body(new SmsResponse("",true,userRes));
@@ -39,10 +39,14 @@ public class UserController {
     }
 
     @PostMapping("/fetchMany")
-    public ResponseEntity<SmsResponse> getManyUsers(@RequestBody List<Long> ids) {
-        List<User> users=userService.getManyById(ids);
-        List<UserPojo> userRes=new ArrayList<>();
-        users.forEach(user->userRes.add(userToDto(user)));
+    public ResponseEntity<SmsResponse> getManyUsers(@RequestBody Long id) {
+        User user = userService.getUserById(id);
+        UserPojo userRes = new UserPojo();
+        userRes.setUserId(user.getUserId());
+        userRes.setFirstName(user.getFirstName());
+        userRes.setLastName(user.getLastName());
+        userRes.setEmail(user.getEmail());
+        userRes.setRole(user.getRoles().getRole());
         return ResponseEntity.ok().body(new SmsResponse("",true,userRes));
     }
 
@@ -54,18 +58,13 @@ public class UserController {
 //        return ResponseEntity.ok().body(new SmsResponse("",true,userRes));
 //    }
 //
-//    @GetMapping("/fetchUser/{id}")
-//    public ResponseEntity<SmsResponse> getStudent(Long id) {
-//        User user = userService.getById(id);
-//       UserPojo userPojo = new UserPojo();
-//       userPojo.setUserId(user.getUserId());
-//       userPojo.setEmail(user.getEmail());
-//       userPojo.setRole(user.getRoles().getRole());
-//       userPojo.setFirstName(user.getFirstName());
-//       userPojo.setLastName(user.getLastName());
-//
-//       return ResponseEntity.ok().body(userPojo);
-//    }
+    @PutMapping("/fetchUser/{id}")
+    public ResponseEntity<SmsResponse> updateUser (@PathVariable Long id ,@RequestBody UserPojo userPojo) {
+
+        User user = userService.updateUser(id,userPojo);
+
+       return ResponseEntity.ok().body(new SmsResponse("",true,user));
+    }
 
     @PostMapping("/save")
     public ResponseEntity<SmsResponse> save(@RequestBody User user){

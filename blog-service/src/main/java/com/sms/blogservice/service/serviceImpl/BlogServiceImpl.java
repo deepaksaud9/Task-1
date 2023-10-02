@@ -30,6 +30,7 @@ public class BlogServiceImpl implements BlogService {
         blog.setBlogDescription(blogPojo.getBlogDescription());
         blog.setCreatedAt(LocalDateTime.now());
         blog.setCategory(blogPojo.getCategory());
+        blog.setStatus("ACTIVE");
 
 
         return blogRepository.save(blog);
@@ -76,7 +77,7 @@ public class BlogServiceImpl implements BlogService {
             throw new NotFoundException("thi blog not found");
         }
 
-        optionalBlog.get().setStatus("ACTIVE");
+        optionalBlog.get().setStatus("NOT ACTIVE");
          blogRepository.save(optionalBlog.get());
 
          return ResponseEntity.ok().body("Deleted Successfully.");
